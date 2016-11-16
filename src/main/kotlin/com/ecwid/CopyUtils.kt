@@ -1,9 +1,11 @@
 package com.ecwid
 
+import kotlin.reflect.KProperty1
+import kotlin.reflect.declaredMemberProperties
 import kotlin.reflect.jvm.accessible
 import kotlin.reflect.jvm.isAccessible
-import kotlin.reflect.memberProperties
 
+@Suppress("UNCHECKED_CAST")
 /**
  * Created by aleksandr on 15.11.16.
  */
@@ -11,22 +13,17 @@ class CopyUtils<T> {
 
     constructor()
 
-    fun copyIntProperty(obj:Any):T{
-        val properties = obj.javaClass.kotlin.memberProperties
+    fun copyIntProperty(obj: Any): T {
+        val properties = getProperties(obj)
         val newInstance = obj.javaClass.newInstance()
 
         properties.forEach { prop ->
             run {
-                if (!prop.isAccessible){
+                if (!prop.isAccessible) {
                     prop.accessible = true
-                    val mp = prop.getter
-                    mp.property.accessible = true
-                    var f = newInstance.javaClass.getDeclaredField(prop.name)
-
-                    f.isAccessible = true
 
                     println(prop.name + " :: " + prop.get(obj))
-                    f.set(newInstance, prop.get(obj))
+                    setFieldValue(obj, newInstance, prop)
                     println(prop.name + " :: " + prop.get(newInstance))
                 }
 
@@ -34,6 +31,43 @@ class CopyUtils<T> {
         }
 
         return newInstance as T
+    }
+
+    fun theyAreEqual(first: Any, second: Any): Boolean {
+        val propertyFirst = getProperties(first)
+        val propertySecond = getProperties(second)
+
+        if (propertyFirst.size != propertySecond.size) return false
+
+        for (i in 0..propertyFirst.size - 1) {
+            if (propertyFirst[i].name != propertySecond[i].name) return false
+
+            if (getFieldValue(first, propertyFirst[i]) != getFieldValue(second, propertySecond[i])) return false
+        }
+
+        return true
+    }
+
+    private fun getProperties(obj: Any): List<KProperty1<Any, *>> {
+        val propertyList: MutableList<KProperty1<Any, *>> = mutableListOf()
+        val properties = obj.javaClass.kotlin.declaredMemberProperties
+        properties.forEach { kProperty1 ->
+            run {
+                propertyList.add(kProperty1)
+            }
+        }
+        return propertyList
+    }
+
+    private fun getFieldValue(obj: Any, kProperty: KProperty1<Any, *>): Any? {
+        kProperty.isAccessible = true
+        return kProperty.get(obj)
+    }
+
+    private fun setFieldValue(from: Any, to: Any, kProperty: KProperty1<Any, *>){
+        val f = from.javaClass.getDeclaredField(kProperty.name)
+        f.isAccessible = true
+        f.set(to, kProperty.get(from))
     }
 }
 
