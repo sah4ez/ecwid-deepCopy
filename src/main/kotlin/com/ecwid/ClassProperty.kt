@@ -28,10 +28,6 @@ class ClassProperty {
     constructor() {
     }
 
-    constructor(property1: Int) {
-        this.propertyInt1 = property1
-    }
-
     constructor(propertyInt1: Int, propertyInt2: Int, propertyString1: String) {
         this.propertyInt1 = propertyInt1
         this.propertyInt2 = propertyInt2

@@ -11,8 +11,6 @@ import kotlin.reflect.jvm.isAccessible
  */
 class CopyUtils {
 
-    constructor()
-
     companion object {
         fun copyProperties(obj: Any): Any {
             val properties = getProperties(obj)
