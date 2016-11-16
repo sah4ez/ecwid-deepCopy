@@ -20,7 +20,7 @@ class ClassWithSubclass {
         this.CollectionInt = CollectionInt
     }
 
-    class SubClass {
+    private class SubClass {
 
         constructor()
 
