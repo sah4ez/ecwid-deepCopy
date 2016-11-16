@@ -2,19 +2,32 @@ package com.ecwid
 
 import org.junit.Assert
 import org.junit.Test
+
 /**
  * Created by aleksandr on 14.11.16.
  */
 
 class TestClass1 {
 
-    @Test fun testGetPropertyName() {
-        val c1 = Class1(2)
-        val cu = CopyUtils<Class1>()
-        val c2 = cu.copyIntProperty(c1)
+    @Test fun testCopyProperties() {
+        val c1 = ClassProperty(2, 2, "two")
+        val c2 = CopyUtils.Companion.copyProperties(c1)
 
-        Assert.assertEquals(2, c2.property1)
-        Assert.assertTrue(cu.theyAreEqual(c1, c2))
+        Assert.assertTrue(CopyUtils.Companion.theyAreEqual(c1, c2))
+    }
+
+    @Test fun testCopyCollection() {
+        val c1 = ClassCollection(mutableListOf(6, 7, 8, 9, 0))
+        val c2 = CopyUtils.Companion.copyProperties(c1)
+
+        Assert.assertTrue(CopyUtils.Companion.theyAreEqual(c1, c2))
+    }
+
+    @Test fun testCopySubClass() {
+        val c1 = ClassWithSubclass(2, mutableListOf(6, 7, 8, 9, 0))
+        val c2 = CopyUtils.Companion.copyProperties(c1)
+
+        Assert.assertTrue(CopyUtils.Companion.theyAreEqual(c1, c2))
     }
 
 }
