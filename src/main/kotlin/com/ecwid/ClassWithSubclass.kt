@@ -9,22 +9,28 @@ class ClassWithSubclass {
 
     private val propertyIntVal1: Int = 1
 
-    private var CollectionInt = mutableListOf(1, 2, 3, 4, 5)
+    private var collectionInt = mutableListOf(1, 2, 3, 4, 5)
 
-    private val CollectionIntVal = mutableListOf(1, 2, 3, 4, 5)
+    private val collectionIntVal = mutableListOf(1, 2, 3, 4, 5)
+
+    private var subClass = SubClass(2, mutableListOf(6, 7, 8, 9, 0))
 
     constructor()
 
     constructor(propertyInt1: Int, CollectionInt: MutableList<Int>) {
         this.propertyInt1 = propertyInt1
-        this.CollectionInt = CollectionInt
+        this.collectionInt = CollectionInt
     }
 
-    private class SubClass {
+    constructor(subClass: SubClass){
+        this.subClass = subClass
+    }
+
+    public class SubClass {
 
         constructor()
 
-        constructor(subPropInt1: Int, subCollectionInt: MutableList<Int>) {
+        public constructor(subPropInt1: Int, subCollectionInt: MutableList<Int>) {
             this.subPropInt1 = subPropInt1
             this.subCollectionInt = subCollectionInt
         }
